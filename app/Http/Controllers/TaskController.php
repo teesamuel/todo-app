@@ -20,7 +20,7 @@ class TaskController extends Controller
         try{  
             return response()->json(["status"=>true,"data"=>$task->get(),"message"=>"Task was successfully retrieved"], 200);
         }catch(Exception $e){
-                response()->json(["status"=>false,"data"=>null,"message"=>"Failed to create task "], 412);
+                response()->json(["status"=>false,"data"=>null,"message"=>"Failed to retrive task "], 412);
         }
     }
 
@@ -53,12 +53,10 @@ class TaskController extends Controller
     public function show(Task $task)
     {
         try{
-            dd('dsfsd');
              return response()->json(["status"=>true,"data"=>$task,"message"=>"Task was successfully retrieved"], 200);
         }catch(Exception $e){
-            response()->json(["status"=>false,"data"=>null,"message"=>"Failed to create task "], 412);
+            response()->json(["status"=>false,"data"=>null,"message"=>"Failed to retrive task "], 412);
         }
-
     }
 
     /**
@@ -71,9 +69,9 @@ class TaskController extends Controller
     public function update(ValidateTask $request, Task $task)
     {
         try{
-            $task->title=$request->title;
-            $task->description=$request->description;
-        if($task->save()) return response()->json(["status"=>true,"data"=>$task,"message"=>"Task update was successfully created"], 201);
+            $task->title=isset($request->title) ? $request->title : $task->title  ;
+            $task->description=isset($request->description) ? $request->description : $task->description  ;
+        if($task->update()) return response()->json(["status"=>true,"data"=>$task,"message"=>"Task update was successfully done"], 200);
             else response()->json(["status"=>false,"data"=>null,"message"=>"Failed to update new task "], 412);
         }catch(Exception $e){
             response()->json(["status"=>false,"data"=>null,"message"=>"Failed to update task "], 412);
@@ -89,13 +87,11 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
-        
         try{
-             $record=$task;
-             if($task->delete()) return response()->json(["status"=>true,"data"=>$record,"message"=>"Task was successfully deleted"], 200);
+             if($task->delete()) return response()->json(["status"=>true,"data"=>$task,"message"=>"Task was successfully deleted"], 200);
              else response()->json(["status"=>false,"data"=>null,"message"=>"Failed to delete task "], 412);
         }catch(Exception $e){
-            response()->json(["status"=>false,"data"=>null,"message"=>"Failed to create task "], 412);
+            response()->json(["status"=>false,"data"=>null,"message"=>"Failed to delete task "], 412);
         }
 
     }
